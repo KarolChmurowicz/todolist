@@ -1,9 +1,10 @@
-package com.kchmurowicz.todolist.model;
+package com.kchmurowicz.todolist.models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Task {
@@ -13,6 +14,12 @@ public class Task {
     private Long id;
 	private String name;
 	private String description;
+	
+	@ManyToOne
+	private TaskList taskList;
+	
+	public Task() {
+	}
 	
 	public Task(String name, String description) {
 		this.name=name;

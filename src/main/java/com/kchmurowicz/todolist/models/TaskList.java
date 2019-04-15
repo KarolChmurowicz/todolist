@@ -1,4 +1,4 @@
-package com.kchmurowicz.todolist.model;
+package com.kchmurowicz.todolist.models;
 
 import java.util.*;
 
@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class List {
+public class TaskList {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
