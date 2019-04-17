@@ -16,7 +16,7 @@ public class TaskList {
 	private Long id;
 	private String name;
 	
-	@OneToMany
+	@OneToMany(mappedBy="taskList")
 	private List <Task> tasks = new ArrayList<>();
 	
 	public Long getId() {
@@ -31,6 +31,13 @@ public class TaskList {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "TaskList{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", tasks=" + tasks +
+				'}';
+	}
 }
