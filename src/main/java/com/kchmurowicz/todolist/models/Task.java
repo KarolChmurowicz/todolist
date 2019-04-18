@@ -1,6 +1,9 @@
 package com.kchmurowicz.todolist.models;
 
+import org.springframework.lang.NonNull;
+
 import javax.persistence.*;
+import javax.validation.Valid;
 
 @Entity
 public class Task {
@@ -13,6 +16,7 @@ public class Task {
 
     @ManyToOne()
     @JoinColumn(name = "task_list_id")
+    @NonNull
     private TaskList taskList;
 
     public Task() {
@@ -47,4 +51,11 @@ public class Task {
         this.id = id;
     }
 
+    public TaskList getTaskList() {
+        return taskList;
+    }
+
+    public void setTaskList(TaskList taskList) {
+        this.taskList = taskList;
+    }
 }

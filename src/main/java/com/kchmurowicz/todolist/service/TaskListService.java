@@ -5,6 +5,7 @@ import com.kchmurowicz.todolist.repository.TaskListRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskListService {
@@ -25,5 +26,12 @@ public class TaskListService {
 
     public void delete(Long taskListId){
         taskListRepository.deleteById(taskListId);
+    }
+
+    public TaskList update(TaskList taskList){return taskListRepository.save(taskList);}
+
+
+    public Optional<TaskList> findById(Long taskListId) {
+        return taskListRepository.findById(taskListId);
     }
 }
