@@ -6,6 +6,7 @@ import com.kchmurowicz.todolist.service.TaskService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/tasks")
@@ -29,5 +30,9 @@ public class TaskController {
         taskService.deleteTask(taskId);
     }
 
-
+    @GetMapping
+    public @ResponseBody
+    List<Task> getTasks() {
+        return taskService.findAll();
+    }
 }
