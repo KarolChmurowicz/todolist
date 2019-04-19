@@ -33,6 +33,12 @@ public class TaskService {
             return save(task);
         }
 
-        throw new IllegalArgumentException("Could find task list with given id.");
+        throw new IllegalArgumentException("Could not find task list with given id.");
     }
+
+    public void deleteTask(Long taskId){
+        taskRepository.deleteById(taskId);
+    }
+
+
 }
