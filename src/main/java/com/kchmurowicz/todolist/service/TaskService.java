@@ -47,19 +47,22 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    public Task updateTask(TaskDto taskDto){
-        Optional<Task> task = taskRepository.findById(taskDto.getId());
+    public Task updateTask(TaskDto taskDto, Long taskId){
 
-        if (task.isPresent()) {
-            Task existingTask = task.get();
-            existingTask.setName(taskDto.getName());
-            existingTask.setDescription(taskDto.getDescription());
+        if (taskId.equals(taskDto.getId())) {
+            Optional<Task> task = taskRepository.findById(taskId);
 
-            return save(existingTask);
+            if (task.isPresent()) {
+                Task existingTask = task.get();
+                existingTask.setName(taskDto.getName());
+                existingTask.setDescription(taskDto.getDescription());
 
-
+                return save(existingTask);
+            }
+            throw new IllegalArgumentException("Could not find Task with given id");
         }
-        throw new IllegalArgumentException("Could not find Task with given id");
+
+        throw new IllegalArgumentException("Id from url and body do not match.");
     }
 
 }

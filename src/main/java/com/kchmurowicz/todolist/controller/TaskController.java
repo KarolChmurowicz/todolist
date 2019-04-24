@@ -35,9 +35,10 @@ public class TaskController {
     List<Task> getTasks() {
         return taskService.findAll();
     }
-    @PutMapping
-    public @ResponseBody Task updateTask(@Valid @RequestBody TaskDto task){
-        return taskService.updateTask(task);
+    @PutMapping(value="/{taskId}")
+    public @ResponseBody Task updateTask(@Valid @RequestBody TaskDto task, @PathVariable Long taskId){
+        return taskService.updateTask(task,taskId);
     }
+
 
 }
