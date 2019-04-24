@@ -20,12 +20,14 @@ public class TaskService {
         this.taskListService = taskListService;
     }
 
-    public Task save(Task task) {return  taskRepository.save(task);}
+    public Task save(Task task) {
+        return taskRepository.save(task);
+    }
 
     public Task createTask(TaskDto taskDto) {
         Optional<TaskList> taskList = taskListService.findById(taskDto.getTaskListId());
 
-        if(taskList.isPresent()){
+        if (taskList.isPresent()) {
             Task task = new Task();
             task.setName(taskDto.getName());
             task.setDescription(taskDto.getDescription());
@@ -37,10 +39,29 @@ public class TaskService {
         throw new IllegalArgumentException("Could not find task list with given id.");
     }
 
-    public void deleteTask(Long taskId){
+    public void deleteTask(Long taskId) {
         taskRepository.deleteById(taskId);
     }
 
-    public List<Task> findAll(){ return taskRepository.findAll();    }
+    public List<Task> findAll() {
+        return taskRepository.findAll();
+    }
+
+    public Task updateTask(TaskDto taskDto){
+        Optional<Task> task = taskRepository.findById(taskDto.getId());
+
+        if (task.isPresent()) {
+            Task existingTask = task.get();
+            existingTask.setName(taskDto.getName());
+            existingTask.setDescription(taskDto.getDescription());
+
+            return save(existingTask);
+
+
+        }
+        throw new IllegalArgumentException("Could not find Task with given id");
+    }
 
 }
+
+

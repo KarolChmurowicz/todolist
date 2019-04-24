@@ -35,4 +35,9 @@ public class TaskController {
     List<Task> getTasks() {
         return taskService.findAll();
     }
+    @PutMapping
+    public @ResponseBody Task updateTask(@Valid @RequestBody TaskDto task){
+        return taskService.updateTask(task);
+    }
+
 }
