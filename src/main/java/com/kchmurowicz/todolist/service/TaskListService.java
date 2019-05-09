@@ -14,7 +14,7 @@ public class TaskListService {
 
     private final TaskListRepository taskListRepository;
 
-    private Logger LOGGER = LogManager.getLogger(this.getClass());
+    private final Logger LOGGER = LogManager.getLogger(this.getClass());
 
 
     public TaskListService(TaskListRepository taskListRepository) {

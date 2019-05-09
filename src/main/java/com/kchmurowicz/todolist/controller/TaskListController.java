@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping(value = "/lists")
 public class TaskListController {
 
-    private Logger LOGGER = LogManager.getLogger(this.getClass());
+    private final Logger LOGGER = LogManager.getLogger(this.getClass());
 
     private final TaskListService taskListService;
 

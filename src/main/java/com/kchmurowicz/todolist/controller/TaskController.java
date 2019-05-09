@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/tasks")
 public class TaskController {
 
-    private Logger LOGGER = LogManager.getLogger(this.getClass());
+    private final Logger LOGGER = LogManager.getLogger(this.getClass());
 
     private final TaskService taskService;
 
