@@ -1,24 +1,29 @@
 package com.kchmurowicz.todolist.models;
 
+import org.springframework.lang.NonNull;
+
+import java.io.Serializable;
 import java.util.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 @Entity
-public class TaskList {
+public class TaskList implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	private String name;
-	
+
+	@ManyToOne()
+	@JoinColumn(name = "user_id")
+	private User user;
+
 	@OneToMany(mappedBy="taskList")
 	private List <Task> tasks = new ArrayList<>();
-	
+
+
+
 	public Long getId() {
 		return id;
 	}
@@ -30,6 +35,22 @@ public class TaskList {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public List<Task> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(List<Task> tasks) {
+		this.tasks = tasks;
 	}
 
 	@Override

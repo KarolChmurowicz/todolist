@@ -5,6 +5,7 @@ import com.kchmurowicz.todolist.models.Task;
 import com.kchmurowicz.todolist.service.TaskService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -12,18 +13,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/tasks")
+@PreAuthorize("hasRole('ADMIN')")
 public class TaskController {
 
     private final Logger LOGGER = LogManager.getLogger(this.getClass());
 
     private final TaskService taskService;
 
-
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }
 
-    @PostMapping()
+    @PostMapping
     public @ResponseBody
     Task createTask(@Valid @RequestBody TaskDto task) {
         LOGGER.debug("Received request to create a task with name {}", task.getName());
@@ -42,14 +43,16 @@ public class TaskController {
     @GetMapping
     public @ResponseBody
     List<Task> getTasks() {
-LOGGER.debug("Received request to get all tasks");
+        LOGGER.debug("Received request to get all tasks");
         return taskService.findAll();
     }
-    @PutMapping(value="/{taskId}")
-    public @ResponseBody Task updateTask(@Valid @RequestBody TaskDto task, @PathVariable Long taskId){
-        LOGGER.debug("Received a request to update a task with name{} and id{}",task.getName(),taskId);
-        Task updatedTask = taskService.updateTask(task,taskId);
-        LOGGER.debug("Returning updated task with name{} and id{}",updatedTask.getName(),taskId);
+
+    @PutMapping(value = "/{taskId}")
+    public @ResponseBody
+    Task updateTask(@Valid @RequestBody TaskDto task, @PathVariable Long taskId) {
+        LOGGER.debug("Received a request to update a task with name{} and id{}", task.getName(), taskId);
+        Task updatedTask = taskService.updateTask(task, taskId);
+        LOGGER.debug("Returning updated task with name{} and id{}", updatedTask.getName(), taskId);
         return updatedTask;
     }
 
