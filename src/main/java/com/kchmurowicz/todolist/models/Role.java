@@ -6,9 +6,11 @@ public enum Role {
 
     public final String string;
 
-    private Role(String string){
+     Role(String string){
         this.string=string;
     }
 
-
+    public String getString() {
+        return string;
+    }
 }
