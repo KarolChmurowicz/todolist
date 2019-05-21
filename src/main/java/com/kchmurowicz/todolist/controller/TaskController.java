@@ -28,7 +28,7 @@ public class TaskController {
     public @ResponseBody
     Task createTask(@Valid @RequestBody TaskDto task, Principal principal) {
         LOGGER.debug("Received request to create a task with name {}", task.getName());
-        Task createdTask = taskService.createTask(task);
+        Task createdTask = taskService.createTask(task, principal);
         LOGGER.debug("Returning create task with name {}", createdTask.getName());
         return createdTask;
     }

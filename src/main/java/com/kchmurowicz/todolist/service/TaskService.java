@@ -3,11 +3,15 @@ package com.kchmurowicz.todolist.service;
 import com.kchmurowicz.todolist.dto.TaskDto;
 import com.kchmurowicz.todolist.models.Task;
 import com.kchmurowicz.todolist.models.TaskList;
+import com.kchmurowicz.todolist.models.User;
 import com.kchmurowicz.todolist.repository.TaskRepository;
+import com.kchmurowicz.todolist.security.ExtendedUser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,19 +22,24 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final TaskListService taskListService;
+    private final UserService userService;
 
-    public TaskService(TaskRepository taskRepository, TaskListService taskListService) {
+    public TaskService(TaskRepository taskRepository, TaskListService taskListService, UserService userService) {
         this.taskRepository = taskRepository;
         this.taskListService = taskListService;
+   this.userService=userService;
     }
 
     public Task save(Task task) {
         return taskRepository.save(task);
     }
 
-    public Task createTask(TaskDto taskDto) {
+    public Task createTask(TaskDto taskDto, Principal principal ) {
 
         Optional<TaskList> taskList = taskListService.findById(taskDto.getTaskListId());
+        Long userId = ((ExtendedUser) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getId();
+        Optional<User> user = userService.findById(userId);
+
 
         if (taskList.isPresent()) {
             LOGGER.debug("taskList has been found ");
@@ -38,6 +47,7 @@ public class TaskService {
             task.setName(taskDto.getName());
             task.setDescription(taskDto.getDescription());
             task.setTaskList(taskList.get());
+            task.setUser(user.get());
             LOGGER.debug("created a task");
             return save(task);
         }

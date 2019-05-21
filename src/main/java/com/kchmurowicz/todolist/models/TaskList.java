@@ -1,5 +1,6 @@
 package com.kchmurowicz.todolist.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.lang.NonNull;
 
 import java.io.Serializable;
@@ -17,6 +18,7 @@ public class TaskList implements Serializable {
 
 	@ManyToOne()
 	@JoinColumn(name = "user_id")
+	@JsonIgnore
 	private User user;
 
 	@OneToMany(mappedBy="taskList")

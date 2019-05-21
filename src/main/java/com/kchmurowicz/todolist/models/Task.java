@@ -1,5 +1,6 @@
 package com.kchmurowicz.todolist.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
@@ -17,11 +18,13 @@ public class Task implements Serializable {
     @ManyToOne()
     @JoinColumn(name = "task_list_id")
     @NonNull
+    @JsonIgnore
     private TaskList taskList;
 
     @ManyToOne()
     @JoinColumn(name = "user_id")
     @NonNull
+    @JsonIgnore
     private User user;
 
     public Task() {
