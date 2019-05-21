@@ -1,4 +1,4 @@
-package com.kchmurowicz.todolist.config;
+package com.kchmurowicz.todolist.security;
 
 import com.kchmurowicz.todolist.models.User;
 import com.kchmurowicz.todolist.repository.UserRepository;
@@ -27,7 +27,7 @@ public class MyUserDetailService implements UserDetailsService {
         }
 
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), this.determineUserRoles(user));
+        return new ExtendedUser(user.getId(), user.getUsername(), user.getPassword(), this.determineUserRoles(user));
     }
 
     private List<GrantedAuthority> determineUserRoles(User user) {

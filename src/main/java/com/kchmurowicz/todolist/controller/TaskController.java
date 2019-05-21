@@ -9,11 +9,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
 @RequestMapping("/tasks")
-@PreAuthorize("hasRole('ADMIN')")
 public class TaskController {
 
     private final Logger LOGGER = LogManager.getLogger(this.getClass());
@@ -26,7 +26,7 @@ public class TaskController {
 
     @PostMapping
     public @ResponseBody
-    Task createTask(@Valid @RequestBody TaskDto task) {
+    Task createTask(@Valid @RequestBody TaskDto task, Principal principal) {
         LOGGER.debug("Received request to create a task with name {}", task.getName());
         Task createdTask = taskService.createTask(task);
         LOGGER.debug("Returning create task with name {}", createdTask.getName());

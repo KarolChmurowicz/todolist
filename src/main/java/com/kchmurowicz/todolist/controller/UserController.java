@@ -9,7 +9,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/users")
-@PreAuthorize("permitAll()")
 public class UserController {
 
     private final UserService userService;

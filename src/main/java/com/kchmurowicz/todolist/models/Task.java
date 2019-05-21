@@ -19,6 +19,11 @@ public class Task implements Serializable {
     @NonNull
     private TaskList taskList;
 
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    @NonNull
+    private User user;
+
     public Task() {
     }
 
@@ -57,5 +62,13 @@ public class Task implements Serializable {
 
     public void setTaskList(TaskList taskList) {
         this.taskList = taskList;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
