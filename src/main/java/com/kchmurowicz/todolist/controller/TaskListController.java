@@ -6,6 +6,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -29,9 +31,9 @@ public class TaskListController {
 
     @PostMapping()
     public @ResponseBody
-    TaskList createTaskList(@RequestBody TaskList taskList) {
+    TaskList createTaskList(@Valid @RequestBody TaskList taskList, Principal principal) {
         LOGGER.debug("Received a request to create a TaskList with name {}", taskList.getName());
-        TaskList createdTaskList = taskListService.save(taskList);
+        TaskList createdTaskList = taskListService.createTaskList(taskList,principal);
         LOGGER.debug("Returning created TaskList with name {}", createdTaskList.getName());
         return createdTaskList;
     }
