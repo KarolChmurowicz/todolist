@@ -24,9 +24,9 @@ public class TaskListController {
 
     @GetMapping()
     public @ResponseBody
-    List<TaskList> getTasksList() {
+    List<TaskList> getTasksList(Principal principal) {
         LOGGER.debug("Received request to get all TasksList");
-        return taskListService.findAll();
+        return taskListService.findUsersLists(principal);
     }
 
     @PostMapping()

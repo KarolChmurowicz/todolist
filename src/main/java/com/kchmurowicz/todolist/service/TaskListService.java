@@ -46,6 +46,14 @@ public class TaskListService {
         return taskListRepository.findAll();
     }
 
+    public List<TaskList> findUsersLists(Principal principal){
+        Long userId = ((ExtendedUser) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getId();
+        Optional<User> user = userService.findById(userId);
+
+        return taskListRepository.findByUser(user.orElse(null));
+
+    }
+
     public void delete(Long taskListId) {
 
         LOGGER.debug("deleting a TaskList {}", taskListId);
