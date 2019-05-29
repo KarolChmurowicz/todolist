@@ -46,9 +46,9 @@ public class TaskListController {
 
     @PutMapping()
     public @ResponseBody
-    TaskList updateTasksList(@RequestBody TaskList taskList) {
+    TaskList updateTasksList(@RequestBody TaskList taskList, Principal principal) {
         LOGGER.debug("Received a request to update a TaskList with name {}", taskList.getName());
-        TaskList updatedTaskList = taskListService.update(taskList);
+        TaskList updatedTaskList = taskListService.update(taskList, principal);
         LOGGER.debug("Received a request to create a TaskList with name {}", updatedTaskList.getName());
         return updatedTaskList;
     }

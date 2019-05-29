@@ -29,11 +29,12 @@ public class TaskListService {
 
     public TaskList save(TaskList taskList) {
 
-        LOGGER.debug("creating a TaskList with name{}", taskList.getName());
+        LOGGER.debug("saving a TaskList with name{}", taskList.getName());
         return taskListRepository.save(taskList);
     }
 
     public TaskList createTaskList(TaskList taskList, Principal principal) {
+        LOGGER.debug("creating a TaskList with name{}", taskList.getName());
         Long userId = ((ExtendedUser) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getId();
         Optional<User> user = userService.findById(userId);
         user.ifPresent(taskList::setUser);
@@ -46,7 +47,7 @@ public class TaskListService {
         return taskListRepository.findAll();
     }
 
-    public List<TaskList> findUsersLists(Principal principal){
+    public List<TaskList> findUsersLists(Principal principal) {
         Long userId = ((ExtendedUser) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getId();
         Optional<User> user = userService.findById(userId);
 
@@ -60,9 +61,17 @@ public class TaskListService {
         taskListRepository.deleteById(taskListId);
     }
 
-    public TaskList update(TaskList taskList) {
-        LOGGER.debug("updating a TaskList with name {}", taskList.getName());
-        return taskListRepository.save(taskList);
+    public TaskList update(TaskList updatedTaskList, Principal principal) throws IllegalAccessException {
+        LOGGER.debug("updating a TaskList with name {}", updatedTaskList.getName());
+        Long userId = ((ExtendedUser) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getId();
+        //Optional<User> user = userService.findById(userId);
+        TaskList existingTaskList = taskListRepository.getOne(updatedTaskList.getId());
+
+        if (existingTaskList.getUser().getId().equals(userId)) {
+            existingTaskList.setName(updatedTaskList.getName());
+            return save(existingTaskList);
+        }
+        throw new IllegalAccessException("Session user does not match user assigned to the task list");
     }
 
 
