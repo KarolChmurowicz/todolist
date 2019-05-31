@@ -13,7 +13,6 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
     @Autowired
     private DataSource dataSource;
     @Autowired
@@ -33,14 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .and().csrf().disable();//only for use with postman, enable for browser
     }
 
-
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-
         auth
                 .userDetailsService(userDetailService).passwordEncoder(passwordEncoder());
-
-
-
     }
 }

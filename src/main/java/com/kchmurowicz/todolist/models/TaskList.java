@@ -22,7 +22,7 @@ public class TaskList implements Serializable {
 	@JsonIgnore
 	private User user;
 
-	@OneToMany(mappedBy="taskList")
+	@OneToMany(mappedBy="taskList", orphanRemoval = true)
 	private List <Task> tasks = new ArrayList<>();
 
 

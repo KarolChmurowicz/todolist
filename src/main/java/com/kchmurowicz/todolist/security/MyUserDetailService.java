@@ -15,24 +15,19 @@ import java.util.List;
 
 @Service
 public class MyUserDetailService implements UserDetailsService {
-
     @Autowired
     private UserRepository userRepository;
 
     public UserDetails loadUserByUsername(String username) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
-
             throw new UsernameNotFoundException(username);
         }
-
-
         return new ExtendedUser(user.getId(), user.getUsername(), user.getPassword(), this.determineUserRoles(user));
     }
 
     private List<GrantedAuthority> determineUserRoles(User user) {
         List<GrantedAuthority> roles = new ArrayList<>();
-
         switch (user.getRole()) {
             case ADMIN:
                 roles.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -42,8 +37,6 @@ public class MyUserDetailService implements UserDetailsService {
             default:
                 break;
         }
-
         return roles;
     }
-
 }

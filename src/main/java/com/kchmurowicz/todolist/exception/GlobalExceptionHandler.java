@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
     private final Logger LOGGER = LogManager.getLogger(this.getClass());
 
     @ExceptionHandler(IllegalArgumentException.class)

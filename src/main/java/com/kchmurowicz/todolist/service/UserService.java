@@ -4,13 +4,11 @@ import com.kchmurowicz.todolist.models.User;
 import com.kchmurowicz.todolist.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService {
-
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -24,12 +22,10 @@ public class UserService {
 
     public List<User> findAll(){
         return userRepository.findAll();
-
     }
 
     public void delete(Long userId ){
         userRepository.deleteById(userId);
-
     }
     public User update(User user){
         return userRepository.save(user);
@@ -38,5 +34,4 @@ public class UserService {
     public Optional<User> findById(Long userId){
         return userRepository.findById(userId);
     }
-
 }

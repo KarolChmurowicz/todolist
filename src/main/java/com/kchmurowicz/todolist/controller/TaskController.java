@@ -15,9 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
-
     private final Logger LOGGER = LogManager.getLogger(this.getClass());
-
     private final TaskService taskService;
 
     public TaskController(TaskService taskService) {
@@ -36,7 +34,6 @@ public class TaskController {
     @DeleteMapping(value = "/{taskId}")
     public void deleteTask(@PathVariable Long taskId) {
         LOGGER.debug("Received request to delete a task with id {}", taskId);
-
         taskService.deleteTask(taskId);
     }
 
@@ -55,6 +52,4 @@ public class TaskController {
         LOGGER.debug("Returning updated task with name{} and id{}", updatedTask.getName(), taskId);
         return updatedTask;
     }
-
-
 }
