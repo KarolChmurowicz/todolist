@@ -2,6 +2,7 @@ package com.kchmurowicz.todolist.controller;
 
 import com.kchmurowicz.todolist.models.TaskList;
 import com.kchmurowicz.todolist.service.TaskListService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/admin")
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
     private TaskListService taskListService;
@@ -24,5 +26,6 @@ public class AdminController {
     List<TaskList> getAllTasksLists(){
         return taskListService.findAll();
     }
+
 
 }

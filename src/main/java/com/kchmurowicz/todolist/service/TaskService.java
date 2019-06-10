@@ -10,6 +10,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -24,14 +26,14 @@ public class TaskService {
     public TaskService(TaskRepository taskRepository, TaskListService taskListService, UserService userService) {
         this.taskRepository = taskRepository;
         this.taskListService = taskListService;
-   this.userService=userService;
+        this.userService = userService;
     }
 
     public Task save(Task task) {
         return taskRepository.save(task);
     }
 
-    public Task createTask(TaskDto taskDto, Principal principal ) {
+    public Task createTask(TaskDto taskDto, Principal principal) {
         Optional<TaskList> taskList = taskListService.findById(taskDto.getTaskListId());
         Long userId = ((ExtendedUser) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getId();
         Optional<User> user = userService.findById(userId);
@@ -48,9 +50,18 @@ public class TaskService {
         throw new IllegalArgumentException("Could not find task list with given id.");
     }
 
-    public void deleteTask(Long taskId) {
-        LOGGER.debug("deleting a task with ID {}", taskId);
-        taskRepository.deleteById(taskId);
+    public void deleteTask(Long deletedTaskId, Principal principal) throws IllegalAccessException {
+        LOGGER.debug("deleting a task with ID {}", deletedTaskId);
+        try {
+            Long userId = ((ExtendedUser) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getId();
+            Task existingTask = taskRepository.getOne(deletedTaskId);
+            if (existingTask.getUser().getId().equals(userId)) {
+                taskRepository.deleteById(deletedTaskId);
+            } else {
+                throw new IllegalAccessException("Session user does not match user assigned to the task ");
+            }
+        } catch (EntityNotFoundException ignored) {
+        }
     }
 
     public List<Task> findAll() {
@@ -58,8 +69,14 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
+    public List<Task> findUsersTasks(Principal principal) {
+        Long userId = ((ExtendedUser) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getId();
+        Optional<User> user = userService.findById(userId);
+        return taskRepository.findByUser(user.orElse(null));
+    }
+
     public Task updateTask(TaskDto taskDto, Long taskId) {
-        if (taskId.equals(taskDto.getId())) {
+           if (taskId.equals(taskDto.getId())) {
             LOGGER.debug("task ID matches taskDto ID");
             Optional<Task> task = taskRepository.findById(taskId);
             Task existingTask = task.orElseThrow(() -> new IllegalArgumentException("Could not find Task with given id"));

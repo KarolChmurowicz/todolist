@@ -31,16 +31,16 @@ public class TaskController {
     }
 
     @DeleteMapping(value = "/{taskId}")
-    public void deleteTask(@PathVariable Long taskId) {
+    public void deleteTask(@PathVariable Long taskId, Principal principal) throws IllegalAccessException {
         LOGGER.debug("Received request to delete a task with id {}", taskId);
-        taskService.deleteTask(taskId);
+        taskService.deleteTask(taskId, principal);
     }
 
     @GetMapping
     public @ResponseBody
-    List<Task> getTasks() {
+    List<Task> getTasks(Principal principal) {
         LOGGER.debug("Received request to get all tasks");
-        return taskService.findAll();
+        return taskService.findUsersTasks(principal);
     }
 
     @PutMapping(value = "/{taskId}")

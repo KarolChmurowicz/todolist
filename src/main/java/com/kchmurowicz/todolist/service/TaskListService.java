@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +45,7 @@ public class TaskListService {
     public List<TaskList> findUsersLists(Principal principal) {
         Long userId = ((ExtendedUser) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getId();
         Optional<User> user = userService.findById(userId);
-        return taskListRepository.findByUser(user.orElse(null));
+ return taskListRepository.findByUser(user.orElse(null));
     }
 
     public void delete(Long deletedTaskListId, Principal principal) throws IllegalAccessException {
