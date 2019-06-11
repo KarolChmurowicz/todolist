@@ -45,9 +45,9 @@ public class TaskController {
 
     @PutMapping(value = "/{taskId}")
     public @ResponseBody
-    Task updateTask(@Valid @RequestBody TaskDto task, @PathVariable Long taskId) {
+    Task updateTask(@Valid @RequestBody TaskDto task, @PathVariable Long taskId, Principal principal) throws IllegalAccessException {
         LOGGER.debug("Received a request to update a task with name{} and id{}", task.getName(), taskId);
-        Task updatedTask = taskService.updateTask(task, taskId);
+        Task updatedTask = taskService.updateTask(task, taskId, principal);
         LOGGER.debug("Returning updated task with name{} and id{}", updatedTask.getName(), taskId);
         return updatedTask;
     }

@@ -75,19 +75,23 @@ public class TaskService {
         return taskRepository.findByUser(user.orElse(null));
     }
 
-    public Task updateTask(TaskDto taskDto, Long taskId) {
-           if (taskId.equals(taskDto.getId())) {
+    public Task updateTask(TaskDto taskDto, Long taskId, Principal principal) throws IllegalAccessException {
+        if (taskId.equals(taskDto.getId())) {
             LOGGER.debug("task ID matches taskDto ID");
             Optional<Task> task = taskRepository.findById(taskId);
             Task existingTask = task.orElseThrow(() -> new IllegalArgumentException("Could not find Task with given id"));
-            existingTask.setName(taskDto.getName());
-            existingTask.setDescription(taskDto.getDescription());
-            LOGGER.debug("updated a task");
-            return save(existingTask);
+            Long userId = ((ExtendedUser) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getId();
+            if (existingTask.getUser().getId().equals(userId)) {
+                existingTask.setName(taskDto.getName());
+                existingTask.setDescription(taskDto.getDescription());
+                LOGGER.debug("updated a task");
+                return save(existingTask);
+
+            } else{
+                throw new IllegalAccessException("User is not authorized to update this task");
+            }
         } else {
             throw new IllegalArgumentException("Id from url and body do not match.");
         }
     }
 }
-
-
