@@ -13,9 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/lists")
 public class TaskListController {
-
     private final Logger LOGGER = LogManager.getLogger(this.getClass());
-
     private final TaskListService taskListService;
 
     public TaskListController(TaskListService taskListService) {
@@ -25,14 +23,14 @@ public class TaskListController {
     @GetMapping()
     public @ResponseBody
     List<TaskList> getTasksList(Principal principal) {
-        LOGGER.debug("Received request to get all TasksList");
+        LOGGER.debug("Received a user request to get all TasksList");
         return taskListService.findUsersLists(principal);
     }
 
     @PostMapping()
     public @ResponseBody
     TaskList createTaskList(@Valid @RequestBody TaskList taskList, Principal principal) {
-        LOGGER.debug("Received a request to create a TaskList with name {}", taskList.getName());
+        LOGGER.debug("Received a user request to create a TaskList with name {}", taskList.getName());
         TaskList createdTaskList = taskListService.createTaskList(taskList,principal);
         LOGGER.debug("Returning created TaskList with name {}", createdTaskList.getName());
         return createdTaskList;
@@ -40,16 +38,16 @@ public class TaskListController {
 
     @DeleteMapping()
     public void deleteTasksList(@RequestParam(name = "id") Long taskListId, Principal principal) throws IllegalAccessException {
-        LOGGER.debug("Received a request to delete a TaskList with id {}", taskListId);
+        LOGGER.debug("Received a user request to delete a TaskList with id {}", taskListId);
         taskListService.delete(taskListId,principal);
     }
 
     @PutMapping()
     public @ResponseBody
     TaskList updateTasksList(@RequestBody TaskList taskList, Principal principal) throws IllegalAccessException {
-        LOGGER.debug("Received a request to update a TaskList with name {}", taskList.getName());
+        LOGGER.debug("Received a user request to update a TaskList with name {}", taskList.getName());
         TaskList updatedTaskList = taskListService.update(taskList, principal);
-        LOGGER.debug("Received a request to create a TaskList with name {}", updatedTaskList.getName());
+        LOGGER.debug("Returning updated TaskList with name {}", updatedTaskList.getName());
         return updatedTaskList;
     }
 

@@ -24,31 +24,31 @@ public class TaskController {
     @PostMapping
     public @ResponseBody
     Task createTask(@Valid @RequestBody TaskDto task, Principal principal) {
-        LOGGER.debug("Received request to create a task with name {}", task.getName());
+        LOGGER.debug("Received a user request to create a Task with name {}", task.getName());
         Task createdTask = taskService.createTask(task, principal);
-        LOGGER.debug("Returning create task with name {}", createdTask.getName());
+        LOGGER.debug("Returning create Task with name {}", createdTask.getName());
         return createdTask;
     }
 
     @DeleteMapping(value = "/{taskId}")
     public void deleteTask(@PathVariable Long taskId, Principal principal) throws IllegalAccessException {
-        LOGGER.debug("Received request to delete a task with id {}", taskId);
+        LOGGER.debug("Received a user request to delete a Task with id {}", taskId);
         taskService.deleteTask(taskId, principal);
     }
 
     @GetMapping
     public @ResponseBody
     List<Task> getTasks(Principal principal) {
-        LOGGER.debug("Received request to get all tasks");
+        LOGGER.debug("Received a user request to get all Task");
         return taskService.findUsersTasks(principal);
     }
 
     @PutMapping(value = "/{taskId}")
     public @ResponseBody
     Task updateTask(@Valid @RequestBody TaskDto task, @PathVariable Long taskId, Principal principal) throws IllegalAccessException {
-        LOGGER.debug("Received a request to update a task with name{} and id{}", task.getName(), taskId);
+        LOGGER.debug("Received a user request to update a Task with name {} and id {}", task.getName(), taskId);
         Task updatedTask = taskService.updateTask(task, taskId, principal);
-        LOGGER.debug("Returning updated task with name{} and id{}", updatedTask.getName(), taskId);
+        LOGGER.debug("Returning updated Task with name {} and id {}", updatedTask.getName(), taskId);
         return updatedTask;
     }
 }

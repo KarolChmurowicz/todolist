@@ -24,22 +24,22 @@ public class AdminController {
 
     public AdminController(TaskListService taskListService, TaskService taskService) {
         this.taskListService = taskListService;
-        this.taskService=taskService;
+        this.taskService = taskService;
     }
 
-    @GetMapping(value="/lists")
+    @GetMapping(value = "/lists")
     public @ResponseBody
-    List<TaskList> getAllTasksLists(){
-
-        LOGGER.debug("Received an admin request to get all lists");
+    List<TaskList> getAllTasksLists() {
+        LOGGER.debug("Received an admin request to get all TaskList");
         return taskListService.findAll();
     }
 
     @GetMapping(value = "/tasks")
     public @ResponseBody
-    List<Task> getAllTasks(){
-        LOGGER.debug("Received an admin request to get all tasks");
+    List<Task> getAllTasks() {
+        LOGGER.debug("Received an admin request to get all Task");
         return taskService.findAll();
     }
+
 
 }

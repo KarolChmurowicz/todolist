@@ -38,57 +38,57 @@ public class TaskService {
         Long userId = ((ExtendedUser) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getId();
         Optional<User> user = userService.findById(userId);
         if (taskList.isPresent()) {
-            LOGGER.debug("taskList has been found ");
+            LOGGER.debug("TaskList has been found ");
             Task task = new Task();
             task.setName(taskDto.getName());
             task.setDescription(taskDto.getDescription());
             task.setTaskList(taskList.get());
             task.setUser(user.get());
-            LOGGER.debug("created a task");
+            LOGGER.debug("created a Task");
             return save(task);
         }
-        throw new IllegalArgumentException("Could not find task list with given id.");
+        throw new IllegalArgumentException("Could not find TaskList with given id.");
     }
 
     public void deleteTask(Long deletedTaskId, Principal principal) throws IllegalAccessException {
-        LOGGER.debug("deleting a task with ID {}", deletedTaskId);
+        LOGGER.debug("deleting a Task with ID {}", deletedTaskId);
         try {
             Long userId = ((ExtendedUser) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getId();
             Task existingTask = taskRepository.getOne(deletedTaskId);
             if (existingTask.getUser().getId().equals(userId)) {
                 taskRepository.deleteById(deletedTaskId);
             } else {
-                throw new IllegalAccessException("Session user does not match user assigned to the task ");
+                throw new IllegalAccessException("Session User does not match with User assigned to the Task ");
             }
         } catch (EntityNotFoundException ignored) {
         }
     }
 
     public List<Task> findAll() {
-        LOGGER.debug("getting all Tasks");
+        LOGGER.debug("getting all Task");
         return taskRepository.findAll();
     }
 
     public List<Task> findUsersTasks(Principal principal) {
         Long userId = ((ExtendedUser) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getId();
         Optional<User> user = userService.findById(userId);
+        LOGGER.debug("getting a list of Task belonging to a specific authorized User");
         return taskRepository.findByUser(user.orElse(null));
     }
 
     public Task updateTask(TaskDto taskDto, Long taskId, Principal principal) throws IllegalAccessException {
         if (taskId.equals(taskDto.getId())) {
-            LOGGER.debug("task ID matches taskDto ID");
+            LOGGER.debug("Task ID matches TaskDto ID");
             Optional<Task> task = taskRepository.findById(taskId);
             Task existingTask = task.orElseThrow(() -> new IllegalArgumentException("Could not find Task with given id"));
             Long userId = ((ExtendedUser) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getId();
             if (existingTask.getUser().getId().equals(userId)) {
                 existingTask.setName(taskDto.getName());
                 existingTask.setDescription(taskDto.getDescription());
-                LOGGER.debug("updated a task");
+                LOGGER.debug("updated a Task");
                 return save(existingTask);
-
-            } else{
-                throw new IllegalAccessException("User is not authorized to update this task");
+            } else {
+                throw new IllegalAccessException("User is not authorized to update this Task");
             }
         } else {
             throw new IllegalArgumentException("Id from url and body do not match.");

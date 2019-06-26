@@ -7,8 +7,8 @@ import com.kchmurowicz.todolist.security.ExtendedUser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
+
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -25,12 +25,12 @@ public class TaskListService {
     }
 
     public TaskList save(TaskList taskList) {
-        LOGGER.debug("saving a TaskList with name{}", taskList.getName());
+        LOGGER.debug("saving a TaskList with name {}", taskList.getName());
         return taskListRepository.save(taskList);
     }
 
     public TaskList createTaskList(TaskList taskList, Principal principal) {
-        LOGGER.debug("creating a TaskList with name{}", taskList.getName());
+        LOGGER.debug("creating a TaskList with name {}", taskList.getName());
         Long userId = ((ExtendedUser) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getId();
         Optional<User> user = userService.findById(userId);
         user.ifPresent(taskList::setUser);
@@ -38,14 +38,15 @@ public class TaskListService {
     }
 
     public List<TaskList> findAll() {
-        LOGGER.debug("Getting all TaskLists");
+        LOGGER.debug("Getting all TaskList");
         return taskListRepository.findAll();
     }
 
     public List<TaskList> findUsersLists(Principal principal) {
         Long userId = ((ExtendedUser) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getId();
         Optional<User> user = userService.findById(userId);
- return taskListRepository.findByUser(user.orElse(null));
+        LOGGER.debug("getting a list of TaskList belonging to a specific user");
+        return taskListRepository.findByUser(user.orElse(null));
     }
 
     public void delete(Long deletedTaskListId, Principal principal) throws IllegalAccessException {
@@ -55,7 +56,7 @@ public class TaskListService {
         if (existingTaskList.getUser().getId().equals(userId)) {
             taskListRepository.deleteById(deletedTaskListId);
         } else {
-            throw new IllegalAccessException("Session user does not match user assigned to the task list");
+            throw new IllegalAccessException("Session User does not match with User assigned to the TaskList");
         }
     }
 
@@ -67,7 +68,7 @@ public class TaskListService {
             existingTaskList.setName(updatedTaskList.getName());
             return save(existingTaskList);
         }
-        throw new IllegalAccessException("Session user does not match user assigned to the task list");
+        throw new IllegalAccessException("Session User does not match with User assigned to the TaskList");
     }
 
 
